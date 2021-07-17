@@ -27,8 +27,6 @@ services:
     image: dockerluwan/statefun-greeter:1.5
     expose:
       - "1108"
-    ports:
-      - "1108:1108"
 
   ###############################################################
   #    StateFun runtime

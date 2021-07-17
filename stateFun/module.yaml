@@ -17,12 +17,21 @@ module:
             type: io.statefun.kafka/ingress
             id: greeter.io/user-logins
           spec:
-            address: 10.0.0.2:9092
+            address: 10.0.0.10:9092
             consumerGroupId: consumer-scf
             startupPosition:
               type: earliest
             topics:
-              - topic: scf-etl-test-user-login1
+              - topic: scf-etl-test-user-login-greeter
                 valueType: greeter.types/test.types.UserLogin
                 targets:
                   - greeter.fns/user
+    egresses:
+      - egress:
+          meta:
+            type: io.statefun.kafka/egress
+            id: greeter.io/user-greetings
+          spec:
+            address: 10.0.0.10:9092
+            deliverySemantic:
+              type: at-least-once

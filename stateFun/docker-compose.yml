@@ -24,7 +24,7 @@ services:
   ###############################################################
 
   greeter-functions:
-    image: dockerluwan/statefun-greeter:1.0
+    image: dockerluwan/statefun-greeter:1.5
     expose:
       - "1108"
     ports:

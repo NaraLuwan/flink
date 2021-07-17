@@ -53,7 +53,6 @@ services:
       - "6122"
     depends_on:
       - statefun-manager
-      - kafka
       - greeter-functions
     links:
       - "statefun-manager:statefun-manager"

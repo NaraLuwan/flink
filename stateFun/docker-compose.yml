@@ -17,6 +17,23 @@
 ################################################################################
 version: "2.1"
 
+services:
+
+  ###############################################################
+  #    Functions service
+  ###############################################################
+
+  greeter-functions:
+    image: dockerluwan/statefun-greeter:1.0
+    expose:
+      - "1108"
+    ports:
+      - "1108:1108"
+
+  ###############################################################
+  #    StateFun runtime
+  ###############################################################
+
   statefun-manager:
     image: apache/flink-statefun:3.0.0-java11
     expose:
@@ -29,45 +46,18 @@ version: "2.1"
     volumes:
       - ./module.yaml:/opt/statefun/modules/greeter/module.yaml
 
-  statefun-worker1:
+  statefun-worker:
     image: apache/flink-statefun:3.0.0-java11
     expose:
       - "6121"
       - "6122"
     depends_on:
       - statefun-manager
+      - kafka
+      - greeter-functions
     links:
       - "statefun-manager:statefun-manager"
-    environment:
-      ROLE: worker
-      MASTER_HOST: statefun-manager
-    volumes:
-      - ./module.yaml:/opt/statefun/modules/greeter/module.yaml
-
-  statefun-worker2:
-    image: apache/flink-statefun:3.0.0-java11
-    expose:
-      - "6124"
-      - "6125"
-    depends_on:
-      - statefun-manager
-    links:
-      - "statefun-manager:statefun-manager"
-    environment:
-      ROLE: worker
-      MASTER_HOST: statefun-manager
-    volumes:
-      - ./module.yaml:/opt/statefun/modules/greeter/module.yaml
-
-  statefun-worker3:
-    image: apache/flink-statefun:3.0.0-java11
-    expose:
-      - "6126"
-      - "6127"
-    depends_on:
-      - statefun-manager
-    links:
-      - "statefun-manager:statefun-manager"
+      - "greeter-functions:greeter-functions"
     environment:
       ROLE: worker
       MASTER_HOST: statefun-manager
